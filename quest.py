@@ -1,5 +1,6 @@
 import subprocess
 import io
+import collections
 import os
 import time
 
@@ -81,7 +82,13 @@ def match(im, template):
     return val, pos0, pos1
 
 
+def print_counter(c):
+    for i, n in sorted(c.items()):
+        print(f'{i}: {n}')
+
+
 def play():
+    time_start = time.perf_counter()
     templates = []
     preconditions = []
     for i in range(8):
@@ -93,7 +100,9 @@ def play():
             templatep = template
         templates.append(template)
         preconditions.append(templatep)
-    while True:
+    end = False
+    matches = collections.Counter()
+    while not end:
         im_prev = capture()
         while True:
             time.sleep(1)
@@ -115,12 +124,17 @@ def play():
                     y += 170
                 print(f'match={iid}, tap={x},{y}')
                 tap(x, y)
+                matches[iid] += 1
                 # cv2.rectangle(im, pos0, pos1, (255, 255, 255), 2)
                 # cv2.imshow('im', im)
                 if iid in {6, 7}:
-                    return
+                    end = True
                 break
         time.sleep(2)
+    time_end = time.perf_counter()
+    print('Number of matches:')
+    print_counter(matches)
+    print('Time:', time_end - time_start)
 
 
 def main():
