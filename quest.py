@@ -66,7 +66,7 @@ def captool():
     ct = CapTool(im)
     while True:
         key = cv2.waitKey(1)
-        if key == ord('\n'):
+        if key == ord('\r') or key == ord('\n'):
             break
         elif key == 27:
             return
