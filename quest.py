@@ -89,6 +89,19 @@ def print_counter(c):
 
 def play():
     time_start = time.perf_counter()
+    matches = collections.Counter()
+    try:
+        play1(matches)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        time_end = time.perf_counter()
+        print('Number of matches:')
+        print_counter(matches)
+        print('Time:', time_end - time_start)
+
+
+def play1(matches):
     templates = []
     preconditions = []
     for i in range(8):
@@ -101,11 +114,10 @@ def play():
         templates.append(template)
         preconditions.append(templatep)
     end = False
-    matches = collections.Counter()
     while not end:
         im_prev = capture()
         while True:
-            time.sleep(1)
+            time.sleep(0.5)
             im = capture()
             diff =  (im_prev - im).mean()
             if diff < 10:
@@ -130,11 +142,6 @@ def play():
                 if iid in {6, 7}:
                     end = True
                 break
-        time.sleep(2)
-    time_end = time.perf_counter()
-    print('Number of matches:')
-    print_counter(matches)
-    print('Time:', time_end - time_start)
 
 
 def main():
